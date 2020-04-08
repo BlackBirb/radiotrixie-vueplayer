@@ -5,8 +5,11 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+const root = document.querySelector('#app.BlackPlayer');
+
 new Vue({
+  el: root,
   router,
-  store,
+  store: store(root),
   render: h => h(App)
 }).$mount('#app')

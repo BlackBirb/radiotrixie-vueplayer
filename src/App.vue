@@ -1,32 +1,80 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <div id="app" :class="classes" @mouseenter="activity = true" @mouseleave="activity = false">
+    <div class="inner-wrapper">
+      <router-view/>
     </div>
-    <router-view/>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+export default {
+  data() {
+    return {
+      activity: false,
     }
+  },
+  computed: {
+    classes () {
+      const classes = [ 'BlackPlayer' ]
+      classes.push(this.$store.state.options.fixed ? 'floating' : 'in-place')
+      if(this.activity) classes.push('activity')
+      return classes
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+
+#app.BlackPlayer {
+  user-select: none;
+  display: inline-block;
+  width: 100%;
+  padding: 8px 21px;
+  background-color: #29323c;
+  background-image: linear-gradient(125deg, #323639, #212326);
+  color: #d1d2d3;
+  & .hoverable {
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      color: white;
+    }
+  }
+
+  &.floating {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    box-shadow: 0px -2px 4px 2px rgba(0, 0, 0, 0.14);
+  }
+  &.in-place, &:not(.floating) {
+    position: relative;
+  }
+  &, & * {
+    box-sizing: border-box !important;
+  }
+  & svg {
+    display: block;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+
+  & .inner-wrapper {
+    width: 100%;
+    max-width: 980px;
+    margin: auto;
+  }
+
+  & .text-right {
+    text-align: right;
+  }
+  & .text-center {
+    text-align: center;
+  }
+  & .text-left {
+    text-align: left;
   }
 }
 </style>
