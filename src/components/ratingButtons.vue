@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div class="rating-buttons">
+    <div></div>
+  </div>
 </template>
 
 <script>

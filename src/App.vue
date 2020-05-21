@@ -1,19 +1,25 @@
 <template>
-  <div id="app" :class="classes" @mouseenter="activity = true" @mouseleave="activity = false">
-    <div class="inner-wrapper">
-      <router-view/>
+  <div id="app" :class="classes" @mouseenter="$store.commit('activity', true)" @mouseleave="$store.commit('activity', false)">
+    <div class="player-container">
+      <div class="inner-wrapper">
+        <Player />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Player from '@/views/Player.vue'
+import { mapState } from 'vuex'
+import playerControls from '@/mixins/playerControls'
+
 export default {
-  data() {
-    return {
-      activity: false,
-    }
+  mixins: [ playerControls ],
+  components: {
+    Player
   },
   computed: {
+    ...mapState([ 'activity' ]),
     classes () {
       const classes = [ 'BlackPlayer' ]
       classes.push(this.$store.state.options.fixed ? 'floating' : 'in-place')
@@ -27,12 +33,30 @@ export default {
 <style lang="scss">
 
 #app.BlackPlayer {
+
+  & .player-container {
+    padding: 0px 21px;
+    width: 100%;
+    background-color: #1e2329;
+    // background-image: linear-gradient(125deg, #1e2329, #1e2329);
+
+    & .inner-wrapper {
+      width: 100%;
+      height: 100%;
+      max-width: 980px;
+      margin: auto;
+      padding: 8px 21px;
+      background-color: #15191e;
+      // background-color: #15191d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+  }
   user-select: none;
   display: inline-block;
   width: 100%;
-  padding: 8px 21px;
-  background-color: #29323c;
-  background-image: linear-gradient(125deg, #323639, #212326);
   color: #d1d2d3;
   & .hoverable {
     cursor: pointer;
@@ -41,6 +65,11 @@ export default {
       color: white;
     }
   }
+
+  height: 56px;
+  &.activity {
+  }
+  transition: height .2s;
 
   &.floating {
     position: fixed;
@@ -61,12 +90,6 @@ export default {
     height: 100%;
   }
 
-  & .inner-wrapper {
-    width: 100%;
-    max-width: 980px;
-    margin: auto;
-  }
-
   & .text-right {
     text-align: right;
   }
@@ -77,4 +100,5 @@ export default {
     text-align: left;
   }
 }
+
 </style>
